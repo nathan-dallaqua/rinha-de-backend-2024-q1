@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  load_balancer:
+    image: dallaqua/rinha-load-balancer:latest
+    ports:
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
+
+  api_server_1:
+    image: dallaqua/rinha-api-server-1:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
+
+  api_server_2:
+    image: dallaqua/rinha-api-server-2:latest
+    ports:
+      - "8001:8000"
+    depends_on:
+      - database
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
+
+  database:
+    image: dallaqua/rinha-database:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=mydatabase
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "200MB"
